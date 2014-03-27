@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="@string/LogServerSettingsTitle">
-        <EditTextPreference android:dialogTitle="@string/LogServerTitleText" android:title="@string/LogServerTitleText" android:dialogMessage="@string/iphostentermsg"/>
-        <ListPreference android:entries="@array/logprotocols" android:entryValues="@array/logprotocolvalues"/>
-        <EditTextPreference android:defaultValue="@string/defaultPort" android:title="@string/portTitle"/>
+        <EditTextPreference android:dialogTitle="@string/LogServerTitleText" android:title="@string/LogServerTitleText" android:dialogMessage="@string/iphostentermsg" android:key="@string/SERVER_NAME"/>
+        <ListPreference android:entries="@array/logprotocols" android:entryValues="@array/logprotocolvalues" android:key="@string/PROTOCOL"/>
+        <EditTextPreference android:defaultValue="@string/defaultPort" android:title="@string/portTitle" android:key="@string/PORT"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/FilterGroupTitle">
-        <EditTextPreference android:title="@string/MsgPrependTag"/>
-        <CheckBoxPreference android:title="@string/AddDeviceName"/>
+        <EditTextPreference android:title="@string/MsgPrependTag" android:key="@string/PREPEND_MSG_TEXT"/>
+        <CheckBoxPreference android:title="@string/AddDeviceName" android:key="@string/ADD_DEVICE_NAME"/>
     </PreferenceCategory>
     
 
