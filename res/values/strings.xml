@@ -26,5 +26,6 @@
     <string name="zero">0</string>
     <string name="defaultPort">514</string>
     <string name="portTitle">Port</string>
+    <string name="about_title">About Log Insightq</string>
 
 </resources>
