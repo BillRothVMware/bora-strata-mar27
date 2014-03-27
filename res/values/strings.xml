@@ -28,5 +28,10 @@
     <string name="portTitle">Port</string>
     <string name="about_title">About Log Insightq</string>
     <string name="foo">foo</string>
+    <string name="SERVER_NAME">SERVER_NAME</string>
+    <string name="PROTOCOL">PROTOCOL</string>
+    <string name="PORT">PORT</string>
+    <string name="PREPEND_MSG_TEXT">PREPEND_MSG_TEXT</string>
+    <string name="ADD_DEVICE_NAME">ADD_DEVICE_NAME</string>
 
 </resources>
