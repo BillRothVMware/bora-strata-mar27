@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="@string/LogServerSettingsTitle">
+        <EditTextPreference android:dialogTitle="@string/LogServerTitleText" android:title="@string/LogServerTitleText" android:dialogMessage="@string/iphostentermsg"/>
+        <ListPreference android:entries="@array/logprotocols" android:entryValues="@array/logprotocolvalues"/>
+        <EditTextPreference android:defaultValue="@string/defaultPort" android:title="@string/portTitle"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/FilterGroupTitle">
+        <EditTextPreference android:title="@string/MsgPrependTag"/>
+        <CheckBoxPreference android:title="@string/AddDeviceName"/>
+    </PreferenceCategory>
+    
+
+</PreferenceScreen>

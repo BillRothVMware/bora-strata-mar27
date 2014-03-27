@@ -4,5 +4,27 @@
     <string name="app_name">LogInsight</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="LogServerSettingsTitle">Log Management Server Settings</string>
+    <string name="LogServerTitleText">Log Server IP Address Or Host Namer</string>
+    <string-array name="logprotocols">
+        <item >Syslog TCP</item>
+        <item >Syslog UDP</item>
+        <item >HTTP</item>
+        <item >Syslog TLS</item>
+    </string-array>
+    <string name="iphostentermsg">Enter IP address or hostname</string>
+    <string-array name="logprotocolvalues">
+        <item >tcp</item>
+        <item >udp</item>
+        <item >http</item>
+        <item >tls</item>
+    </string-array>
+    <string name="logMsgFilterCatTitle">Log Message Filters</string>
+    <string name="FilterGroupTitle">Log Filter Settings</string>
+    <string name="MsgPrependTag">Message Tag Prepend</string>
+    <string name="AddDeviceName">Add Device Name?</string>
+    <string name="zero">0</string>
+    <string name="defaultPort">514</string>
+    <string name="portTitle">Port</string>
 
 </resources>
