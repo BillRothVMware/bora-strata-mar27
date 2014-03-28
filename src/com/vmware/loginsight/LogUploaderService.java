@@ -6,6 +6,7 @@ import com.vmware.loginsight.logcat.LogEntry;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.util.Log;
 
 public class LogUploaderService extends IntentService {
 	
@@ -21,6 +22,9 @@ public class LogUploaderService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent arg0) {
 		// TODO Auto-generated method stub
+		if (!LogCatReader.requestPermissions(getApplicationContext())) {
+			Log.w(getClass().getName(), "Failed to acquire READ_LOGS permission, reading app-local logs only.");
+		}
 		final LogCatReader reader = new LogCatReader();
 		reader.addListener(new LogCatListener() {
 			

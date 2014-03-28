@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.util.AbstractSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import android.content.Context;
+import android.util.Log;
+
 public class LogCatReader {
 	private AbstractSet<LogCatListener> mListeners = new CopyOnWriteArraySet<>();
 	private Process mLogCatProcess;
@@ -59,5 +62,20 @@ public class LogCatReader {
 			message.append(line);
 		}
 		return LogEntry.create(header, message.toString());
+	}
+	
+	public static boolean requestPermissions(Context context) {
+		if (context.getPackageManager().checkPermission(android.Manifest.permission.READ_LOGS, context.getPackageName()) == 0) {
+			return true;
+		}
+		// Attempt to grant the READ_LOGS permission ourselves
+		String[] command = new String[] {"su", "-c", String.format("pm grant %s android.permission.READ_LOGS", context.getPackageName())};
+		try {
+			// Successful exit means we're root
+			return Runtime.getRuntime().exec(command).waitFor() == 0;
+		} catch (InterruptedException | IOException e) {
+			Log.e(LogCatReader.class.getName(), e.toString());
+		}
+		return false;
 	}
 }
