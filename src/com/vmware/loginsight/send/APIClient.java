@@ -23,6 +23,7 @@ public class APIClient {
 	private final int port = 9000;
 	private final String prefix;
 	private HttpClient httpClient = new DefaultHttpClient();
+	SyslogIF syslog = Syslog.getInstance("udp");
 
 	/**
 	 * Init class for server at url:port and the given protocol. The "prefix"
@@ -83,8 +84,8 @@ public class APIClient {
 							+ port
 							+ "/api/v1/messages/ingest/3F2504E0-4F89-11D3-9A0C-0305E82C3301");
 			JSONObject textObj = new JSONObject();
-			
-			textObj.put("text", getSyslogMessage(msg));
+
+			textObj.put("text", getSyslogMessage(msg, l, appName, processId));
 
 			textObj.put("timestamp", Calendar.getInstance().getTimeInMillis());
 
@@ -117,13 +118,44 @@ public class APIClient {
 			httpClient.getConnectionManager().shutdown();
 		}
 	}
-	private String getSyslogMessage(String msg) {
-		String message = msg == null? "": msg;
-		
+
+	private String getSyslogMessage(String msg, LogLevel l, String app,
+			String pid) {
+		String message = msg == null ? "" : msg;
+
 		if (prefix != null) {
 			message = prefix + " " + msg;
 		}
-		
-		return message;
+
+		StructuredSyslogMessage sMsg = new StructuredSyslogMessage("",
+				new HashMap<String, String>(), message);
+		StructuredSyslogMessageProcessor processor = new StructuredSyslogMessageProcessor();
+		syslog.setMessageProcessor(processor);
+
+		if (app != null) {
+			processor.setApplicationName(app);
+		}
+
+		if (pid != null) {
+			processor.setProcessId(pid);
+		}
+
+		if (l.equals(LogLevel.ALERT)) {
+			syslog.alert(sMsg);
+		} else if (l.equals(LogLevel.CRITICAL)) {
+			syslog.critical(sMsg);
+		} else if (l.equals(LogLevel.DEBUG)) {
+			syslog.debug(sMsg);
+		} else if (l.equals(LogLevel.ERROR)) {
+			syslog.error(sMsg);
+		} else if (l.equals(LogLevel.INFO)) {
+			syslog.info(sMsg);
+		} else if (l.equals(LogLevel.WARN)) {
+			syslog.warn(sMsg);
+		}
+
+		return (syslog.getMessageProcessor().createSyslogHeader(0, l.ordinal(), "",
+				true, true)
+				+ message);
 	}
 }
