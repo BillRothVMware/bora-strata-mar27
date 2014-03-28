@@ -12,6 +12,8 @@ import android.util.Log;
 public class LogCatReader {
 	private AbstractSet<LogCatListener> mListeners = new CopyOnWriteArraySet<>();
 	private Process mLogCatProcess;
+	private volatile boolean mRunning;
+	private volatile boolean mStopped;
 
 	public void addListener(LogCatListener listener) {
 		mListeners.add(listener);
@@ -24,19 +26,28 @@ public class LogCatReader {
 	public void clearListeners() {
 		mListeners.clear();
 	}
+	
+	public void stop() {
+		mStopped = true;
+	}
+	
+	public boolean isRunning() {
+		return mRunning;
+	}
 
 	public void listen() {
+		mRunning = true;
 		String[] command = new String[] {"logcat", "-v", "long"};
 		try {
 			mLogCatProcess = Runtime.getRuntime().exec(command);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(mLogCatProcess.getInputStream()));
 			//Discard first line, it's just a header
 			reader.readLine();
-			for (LogEntry entry = readLogEntry(reader);; entry = readLogEntry(reader)) {
+			for (LogEntry entry = readLogEntry(reader); !mStopped; entry = readLogEntry(reader)) {
 				if (entry == null) {
 					try {
 						mLogCatProcess.exitValue();
-						return;
+						break;
 					} catch (IllegalThreadStateException e) {
 						// Still running, we just got a bad message
 						continue;
@@ -49,6 +60,8 @@ public class LogCatReader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		mRunning = false;
+		Log.i(getClass().getName(), "Stopped Listening.");
 	}
 	
 	private static LogEntry readLogEntry(BufferedReader reader) throws IOException {
