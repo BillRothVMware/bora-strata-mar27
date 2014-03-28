@@ -3,8 +3,10 @@ package com.vmware.loginsight;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,19 +15,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.preference.PreferenceManager;
 
 @SuppressWarnings("unused")
-public class LogInsightActivity extends Activity {
-	
-	private SharedPreferences gPreferences;
-	private SharedPreferences.Editor gEditor;
-	private static final String PREF_FILE = "_preferences.txt";
+public class LogInsightActivity extends Activity implements OnSharedPreferenceChangeListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_log_insight);
-
+		
+		initializePreferences();
+		
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -34,13 +35,27 @@ public class LogInsightActivity extends Activity {
 		intent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
 		startService(intent);
 		
-		gPreferences = getSharedPreferences(PREF_FILE,MODE_PRIVATE);
-		gEditor = gPreferences.edit();
-		initializePreferences();
+	}
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		Log.d("StrataDroid",key + " changed");
+		//
+		//TODO: Add settings update when you get a chance method.
+		//
 		
 	}
 	
+	
 	private void initializePreferences() {
+		Context context = getApplicationContext();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		
+		String ip = prefs.getString("SERVER_NAME", "10.148.104.186");
+		String proto = prefs.getString("PROTOCOL","udp");
+		
+		int x;
+		x=12;
+		// now set up the listener
+		prefs.registerOnSharedPreferenceChangeListener(this);
 		
 	}
 
