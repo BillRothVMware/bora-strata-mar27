@@ -24,6 +24,8 @@ public class LogInsightActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		Intent intent = new Intent(getApplicationContext(), LogUploaderService.class);
+		startService(intent);
 	}
 
 	@Override
