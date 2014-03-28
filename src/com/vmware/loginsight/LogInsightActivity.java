@@ -1,7 +1,9 @@
 package com.vmware.loginsight;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -24,6 +26,8 @@ import android.preference.PreferenceManager;
 @SuppressWarnings("unused")
 public class LogInsightActivity extends Activity implements OnSharedPreferenceChangeListener {
 
+	private PlaceholderFragment frag;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.d("StrataDroid","onCreate main activity");
@@ -36,7 +40,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+					.add(R.id.container, frag = new PlaceholderFragment()).commit();
 		}
 		Intent intent = new Intent(getApplicationContext(), LogUploaderService.class);
 		// TODO: set based on prefs
@@ -44,13 +48,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		intent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
 		startService(intent);
 		
-		String ip;
-		try {
-			ip =  InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			ip = "Unknown ip";
-		}
+		String ip = getipAddress();
 		set_text_line1(ip);
 	}
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -119,18 +117,42 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 
 		public PlaceholderFragment() {
 		}
-
+        private View rootView;
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_log_insight,
+			rootView = inflater.inflate(R.layout.fragment_log_insight,
 					container, false);
 			return rootView;
 		}
+		View getRootView() {return rootView;}
 	}
 	public void set_text_line1(String msg){
-		TextView line1 = (TextView) findViewById(R.id.textline1);
-		line1.setText(msg);
+		Log.d("StrataDroid","IP appears to be " + msg);
+//		TextView line1 = (TextView) frag.getRootView().findViewById(R.id.textline1);
+//		if(line1 == null) return;
+//		line1.setText(msg);
 		
+	}
+	public String getipAddress() { 
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = (NetworkInterface) en.nextElement();
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = (InetAddress) enumIpAddr.nextElement();
+					if (!inetAddress.isLoopbackAddress()) {
+						String ipaddress=inetAddress.getHostAddress().toString();
+						if(ipaddress.contains("::"))
+							continue;
+						Log.d("StrataDroid","ip address" + ipaddress);
+						return ipaddress;
+					}
+				}
+			}
+		} catch (Exception ex) {
+			Log.e("Socket exception in GetIP Address of Utilities", ex.toString());
+
+		}
+		return "0.0.0.0"; 
 	}
 }
