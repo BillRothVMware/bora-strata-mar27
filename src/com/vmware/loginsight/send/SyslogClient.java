@@ -13,22 +13,22 @@ public class SyslogClient {
 
 	private SyslogIF syslog = null;
 
-	public SyslogClient(String url, int port, LogInsigntProtocol proto) throws Exception { 
+	public SyslogClient(String url, int port, LogInsightProtocol proto) throws Exception { 
 
 		checkParam(url, "url");
 		checkParam(proto, "protocol");
 
-		if (proto.equals(LogInsigntProtocol.SYSLOG_TCP)) {
+		if (proto.equals(LogInsightProtocol.SYSLOG_TCP)) {
 			syslog = Syslog.getInstance("tcp");
-		} else if (proto.equals(LogInsigntProtocol.SYSLOG_UDP)) {
+		} else if (proto.equals(LogInsightProtocol.SYSLOG_UDP)) {
 			syslog = Syslog.getInstance("udp");
-		} else if (proto.equals(LogInsigntProtocol.SYSLOG_TLS)) {
+		} else if (proto.equals(LogInsightProtocol.SYSLOG_TLS)) {
 			SSLTCPNetSyslogConfig syslogConfig = new SSLTCPNetSyslogConfig(url, port);
 			syslog = Syslog.createInstance("sslTcp", syslogConfig);
 		} else {
 			throw new Exception("Protocol " + proto.toString() + " is not supported. Use one of " +
-					LogInsigntProtocol.SYSLOG_TCP + ", " + LogInsigntProtocol.SYSLOG_UDP + 
-		                        " or " + LogInsigntProtocol.SYSLOG_TLS);
+					LogInsightProtocol.SYSLOG_TCP + ", " + LogInsightProtocol.SYSLOG_UDP + 
+		                        " or " + LogInsightProtocol.SYSLOG_TLS);
 		}
 
 		syslog.getConfig().setUseStructuredData(true);
