@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,10 @@ import android.os.Build;
 
 @SuppressWarnings("unused")
 public class LogInsightActivity extends Activity {
+	
+	private SharedPreferences gPreferences;
+	private SharedPreferences.Editor gEditor;
+	private static final String PREF_FILE = "_preferences.txt";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,15 @@ public class LogInsightActivity extends Activity {
 		}
 		Intent intent = new Intent(getApplicationContext(), LogUploaderService.class);
 		startService(intent);
+		
+		gPreferences = getSharedPreferences(PREF_FILE,MODE_PRIVATE);
+		gEditor = gPreferences.edit();
+		initializePreferences();
+		
+	}
+	
+	private void initializePreferences() {
+		
 	}
 
 	@Override
