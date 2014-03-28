@@ -26,10 +26,11 @@ public class SyslogClient {
 			syslog = Syslog.createInstance("sslTcp", syslogConfig);
 		} else {
 			throw new Exception("Protocol " + proto.toString() + " is not supported. Use one of " +
-		                        LogInsightProtocol.SYSLOG_TCP + ", " + LogInsightProtocol.SYSLOG_UDP + 
+					LogInsightProtocol.SYSLOG_TCP + ", " + LogInsightProtocol.SYSLOG_UDP + 
 		                        " or " + LogInsightProtocol.SYSLOG_TLS);
 		}
 
+		syslog.getConfig().setUseStructuredData(true);
 		syslog.getConfig().setHost(url);
 		syslog.getConfig().setPort(port);
 	}
@@ -53,9 +54,10 @@ public class SyslogClient {
 		} else {
 			myFields = fields;
 		}
+		Map<String, Map<String, String>> outMap = new HashMap<String, Map<String, String>>();
+		outMap.put("Fields", myFields);
 		
-//		StructuredSyslogMessage message = new StructuredSyslogMessage("", myFields, msg);
-		String message = msg;
+		StructuredSyslogMessage message = new StructuredSyslogMessage("", outMap, msg);
 		if (l.equals(LogLevel.ALERT)) {
 			syslog.alert(message);
 		} else if (l.equals(LogLevel.CRITICAL)) {
