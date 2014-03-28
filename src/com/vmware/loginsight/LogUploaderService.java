@@ -38,6 +38,9 @@ public class LogUploaderService extends IntentService {
 		final LogCatReader reader = new LogCatReader();
 		try {
 			final SyslogClient client = new SyslogClient(
+					//
+					//TODO: Pull from preferences
+					//
 					intent.getStringExtra(EXTRA_LOG_INSIGHT_HOST),
 					intent.getIntExtra(EXTRA_LOG_INSIGHT_PORT, 514),
 					LogInsightProtocol.SYSLOG_UDP);

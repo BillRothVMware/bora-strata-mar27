@@ -71,5 +71,6 @@ public class SyslogClient {
 		} else if (l.equals(LogLevel.WARN)) {
 			syslog.warn(message);
 		}
+		syslog.flush();
 	}
 }

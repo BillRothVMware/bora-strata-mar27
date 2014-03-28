@@ -32,6 +32,8 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		Intent intent = new Intent(getApplicationContext(), LogUploaderService.class);
+		// TODO: set based on prefs
+		//
 		intent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
 		startService(intent);
 		
@@ -40,7 +42,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		Log.d("StrataDroid",key + " changed");
 		//
 		//TODO: Add settings update when you get a chance method.
-		//
+		//    stop service 
 		
 	}
 	
