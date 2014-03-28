@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.productivity.java.syslog4j.Syslog;
 import org.productivity.java.syslog4j.SyslogIF;
+import org.productivity.java.syslog4j.impl.message.processor.structured.StructuredSyslogMessageProcessor;
 import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.productivity.java.syslog4j.impl.net.tcp.ssl.SSLTCPNetSyslogConfig;
 
@@ -12,22 +13,22 @@ public class SyslogClient {
 
 	private SyslogIF syslog = null;
 
-	public SyslogClient(String url, int port, LogInsightProtocol proto) throws Exception { 
+	public SyslogClient(String url, int port, LogInsigntProtocol proto) throws Exception { 
 
 		checkParam(url, "url");
 		checkParam(proto, "protocol");
 
-		if (proto.equals(LogInsightProtocol.SYSLOG_TCP)) {
+		if (proto.equals(LogInsigntProtocol.SYSLOG_TCP)) {
 			syslog = Syslog.getInstance("tcp");
-		} else if (proto.equals(LogInsightProtocol.SYSLOG_UDP)) {
+		} else if (proto.equals(LogInsigntProtocol.SYSLOG_UDP)) {
 			syslog = Syslog.getInstance("udp");
-		} else if (proto.equals(LogInsightProtocol.SYSLOG_TLS)) {
+		} else if (proto.equals(LogInsigntProtocol.SYSLOG_TLS)) {
 			SSLTCPNetSyslogConfig syslogConfig = new SSLTCPNetSyslogConfig(url, port);
 			syslog = Syslog.createInstance("sslTcp", syslogConfig);
 		} else {
 			throw new Exception("Protocol " + proto.toString() + " is not supported. Use one of " +
-					LogInsightProtocol.SYSLOG_TCP + ", " + LogInsightProtocol.SYSLOG_UDP + 
-		                        " or " + LogInsightProtocol.SYSLOG_TLS);
+					LogInsigntProtocol.SYSLOG_TCP + ", " + LogInsigntProtocol.SYSLOG_UDP + 
+		                        " or " + LogInsigntProtocol.SYSLOG_TLS);
 		}
 
 		syslog.getConfig().setUseStructuredData(true);
@@ -46,6 +47,20 @@ public class SyslogClient {
 	}
 
 	public void send(String msg, LogLevel l, Map<String, String> fields) throws Exception {
+		send(msg, l, fields, null, null);
+	}
+
+	/**
+	 * Sends a syslog message to the syslog server that was provided when the class was instantiated
+	 * 
+	 * @param msg The syslog message text
+	 * @param l Log level
+	 * @param fields a Map<String, String> of key-value pairs that are appended to the message for easy parsing
+	 * @param appName The name of the app emmitting the logs, if value is null the app is not set on the header of the message
+	 * @param processId The pid of the process emmitting the logs, if value is null the pid is not set on the header of the message
+	 * @throws Exception if something is wrong, likely - server unreachable
+	 */
+	public void send(String msg, LogLevel l, Map<String, String> fields, String appName, String processId) throws Exception {
 		checkParam(msg, "msg");
 
 		Map<String, String> myFields;
@@ -58,6 +73,17 @@ public class SyslogClient {
 		outMap.put("Fields", myFields);
 		
 		StructuredSyslogMessage message = new StructuredSyslogMessage("", outMap, msg);
+		StructuredSyslogMessageProcessor processor = new StructuredSyslogMessageProcessor();
+		syslog.setMessageProcessor(processor);
+
+		if (appName != null) {
+			processor.setApplicationName(appName);			
+		}
+
+		if (processId != null) {
+			processor.setProcessId(processId);
+		}
+		
 		if (l.equals(LogLevel.ALERT)) {
 			syslog.alert(message);
 		} else if (l.equals(LogLevel.CRITICAL)) {
