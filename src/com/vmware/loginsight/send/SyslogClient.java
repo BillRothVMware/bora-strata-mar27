@@ -12,9 +12,12 @@ import org.productivity.java.syslog4j.impl.net.tcp.ssl.SSLTCPNetSyslogConfig;
 public class SyslogClient {
 
 	private SyslogIF syslog = null;
+	private final String prefix;
 
-	public SyslogClient(String url, int port, LogInsightProtocol proto) throws Exception { 
-
+	/**
+	 * Init class for server at url:port and the given protocol. The "prefix" String will be added to every message
+	 */
+	public SyslogClient(String url, int port, LogInsightProtocol proto, String prefix) throws Exception {
 		checkParam(url, "url");
 		checkParam(proto, "protocol");
 
@@ -34,6 +37,15 @@ public class SyslogClient {
 		syslog.getConfig().setUseStructuredData(true);
 		syslog.getConfig().setHost(url);
 		syslog.getConfig().setPort(port);
+
+		this.prefix = prefix;
+	}
+
+	/**
+	 * Init class for server at url:port and the given protocol
+	 */
+	public SyslogClient(String url, int port, LogInsightProtocol proto) throws Exception { 
+		this(url, port, proto, null);
 	}
 
 	private void checkParam(Object param, String name) throws Exception {
@@ -61,7 +73,12 @@ public class SyslogClient {
 	 * @throws Exception if something is wrong, likely - server unreachable
 	 */
 	public void send(String msg, LogLevel l, Map<String, String> fields, String appName, String processId) throws Exception {
-		checkParam(msg, "msg");
+		if (msg == null) {
+			msg = "";
+		}
+		if (prefix != null) {
+			msg = prefix + " " + msg;
+		}
 
 		Map<String, String> myFields;
 		if (fields == null) {
