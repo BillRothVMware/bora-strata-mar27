@@ -3,7 +3,9 @@ package com.vmware.loginsight;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +24,20 @@ public class LogInsightActivity extends Activity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		Intent intent = new Intent(getApplicationContext(), LogUploaderService.class);
+		startService(intent);
+		new Thread() {
+			public void run() {
+				while(true) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					Log.d(getClass().getName(), "Test message\ntest test test.");
+				}
+			};
+		}.start();
 	}
 
 	@Override
