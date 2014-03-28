@@ -3,6 +3,7 @@ package com.vmware.loginsight;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+@SuppressWarnings("unused")
 public class LogInsightActivity extends Activity {
 
 	@Override
@@ -38,10 +40,24 @@ public class LogInsightActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		switch(id) {
+		
+		case R.id.action_settings:
+			Intent i = new Intent(this,SettingsActivity.class);
+			startActivityForResult(i,1);
 			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		case R.id.action_about:
+			//
+			// Put in dialog here 
+			// see sample: http://developer.android.com/guide/topics/ui/dialogs.html
+			//
+			int x;
+			x=12;
+			return true;
+			
+			default:
+				return super.onOptionsItemSelected(item);
+		} // switch
 	}
 
 	/**
