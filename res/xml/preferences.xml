@@ -2,12 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="@string/LogServerSettingsTitle">
         <EditTextPreference android:dialogTitle="@string/LogServerTitleText" android:title="@string/LogServerTitleText" android:dialogMessage="@string/iphostentermsg" android:key="SERVER_NAME"/>
-        <ListPreference android:entries="@array/logprotocols" android:entryValues="@array/logprotocolvalues" android:key="PROTOCOL"/>
-        <EditTextPreference android:defaultValue="514" android:title="@string/portTitle" android:key="PORT"/>
+        <ListPreference android:entries="@array/logprotocols" android:entryValues="@array/logprotocolvalues" android:key="PROTOCOL" android:title="Log Protocol"/>
+        <EditTextPreference android:defaultValue="514" android:title="@string/portTitle" android:key="PORT" android:summary="Enter port on server receiving logs"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/FilterGroupTitle">
         <EditTextPreference android:title="@string/MsgPrependTag" android:key="PREPEND_MSG_TEXT"/>
         <CheckBoxPreference android:title="@string/AddDeviceName" android:key="ADD_DEVICE_NAME" android:defaultValue="false"/>
+        <ListPreference android:key="LOG_LEVEL" android:entries="@array/loglevelArray" android:entryValues="@array/logLevelValues" android:summary="Select minimum log level to send to server" android:title="Log Level"/>
     </PreferenceCategory>
     
 
