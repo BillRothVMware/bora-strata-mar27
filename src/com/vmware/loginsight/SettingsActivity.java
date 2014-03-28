@@ -57,6 +57,7 @@ public class SettingsActivity extends PreferenceActivity {
 		//Replace with a Fragment at some point.
 		//
 		addPreferencesFromResource(R.xml.preferences);
+		Log.d("StrataDroid","On Create Settings Activity");
 	}
 
 	/**

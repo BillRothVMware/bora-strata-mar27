@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory android:title="@string/LogServerSettingsTitle">
-        <EditTextPreference android:dialogTitle="@string/LogServerTitleText" android:title="Server Location(IP)" android:dialogMessage="@string/iphostentermsg" android:key="SERVER_NAME" android:summary="IP address of the Log Insightr Server" android:defaultValue="10.148.104.186"/>
+        <EditTextPreference android:dialogTitle="@string/LogServerTitleText" android:title="Server Location(IP)" android:dialogMessage="@string/iphostentermsg" android:key="SERVER_NAME" android:summary="IP address of the Log Insight Server" android:defaultValue="10.148.104.186"/>
         <ListPreference android:entries="@array/logprotocols" android:entryValues="@array/logprotocolvalues" android:key="PROTOCOL" android:title="Log Protocol" android:defaultValue="udp"/>
         <EditTextPreference android:defaultValue="514" android:title="@string/portTitle" android:key="PORT" android:summary="Enter port on server receiving logs"/>
     </PreferenceCategory>

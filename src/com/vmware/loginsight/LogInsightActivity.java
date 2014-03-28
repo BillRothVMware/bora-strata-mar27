@@ -44,11 +44,11 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, frag = new PlaceholderFragment()).commit();
 		}
-		Intent intent = new Intent(getApplicationContext(), LogUploaderService.class);
+		serviceIntent = new Intent(getApplicationContext(), LogUploaderService.class);
 		// TODO: set based on prefs
 		//
-		intent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
-		startService(intent);
+		serviceIntent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
+		startService(serviceIntent);
 		
 		String ip = getipAddress();
 		set_text_line1(ip);
@@ -58,6 +58,11 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		//
 		//TODO: Add settings update when you get a chance method.
 		//    stop service 
+		stopService(serviceIntent);
+		//
+		// do something
+		//
+		startService(serviceIntent);
 		
 	}
 	
@@ -93,7 +98,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		switch(id) {
 		
 		case R.id.action_settings:
-			Log.d("tag","Calling setting dialog");
+			Log.d("StrataDroid","Calling setting dialog");
 			Intent i = new Intent(this,SettingsActivity.class);
 			startActivityForResult(i,1);
 			return true;
@@ -102,7 +107,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 			//TODO: Put in dialog here 
 			// see sample: http://developer.android.com/guide/topics/ui/dialogs.html
 			//
-			Log.d("tag","Calling about dialog");
+			Log.d("StrataDroid","Calling about dialog");
 			int x;
 			x=12;
 			return true;

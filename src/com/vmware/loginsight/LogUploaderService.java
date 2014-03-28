@@ -10,6 +10,7 @@ import com.vmware.loginsight.logcat.LogEntry;
 import com.vmware.loginsight.send.LogInsightProtocol;
 import com.vmware.loginsight.send.LogLevel;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -33,29 +34,39 @@ public class LogUploaderService extends Service {
 			mLogCatReader = null;
 		}
 		if (!LogCatReader.requestPermissions(getApplicationContext())) {
-			Log.w(getClass().getName(),
+			Log.w("StrataDroid",
 					"Failed to acquire READ_LOGS permission, reading app-local logs only.");
 		}
-		String host = intent.getStringExtra(EXTRA_LOG_INSIGHT_HOST);
+		Context context = getApplicationContext();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		
+		String host = prefs.getString("SERVER_NAME", "10.148.104.186");
+ 
+//		String host = intent.getStringExtra(EXTRA_LOG_INSIGHT_HOST);
+		
 		if (host == null) {
 			stopSelf();
 			return Service.START_NOT_STICKY;
-		}
+	}
+		
 		final LogCatReader reader = new LogCatReader();
 		mLogCatReader = reader;
 		try {
-			SharedPreferences preferences = PreferenceManager
-					.getDefaultSharedPreferences(this);
 			int port;
 			try {
-				port = Integer.parseInt(preferences.getString("PORT", "514"));
+				port = Integer.parseInt(prefs.getString("PORT", "514"));
 			} catch (Exception e1) {
 				port = 514;
 			}
-
+			String filter = prefs.getString("PREPEND_MSG_TEXT", "");
+			//
+			// TODO: Use other protocols.
+			//
 			final SyslogClient client = new SyslogClient(host,
 					intent.getIntExtra(EXTRA_LOG_INSIGHT_PORT, port),
-					LogInsightProtocol.SYSLOG_UDP);
+					LogInsightProtocol.SYSLOG_UDP,
+					filter);
+			
 			reader.addListener(new LogCatListener() {
 
 				@Override
