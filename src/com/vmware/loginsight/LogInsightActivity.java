@@ -27,6 +27,8 @@ import android.preference.PreferenceManager;
 public class LogInsightActivity extends Activity implements OnSharedPreferenceChangeListener {
 
 	private PlaceholderFragment frag;
+	private Intent serviceIntent;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +131,8 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	}
 	public void set_text_line1(String msg){
 		Log.d("StrataDroid","IP appears to be " + msg);
+		//TODO: Fix need to grab text view and aset it with ip address
+		//
 //		TextView line1 = (TextView) frag.getRootView().findViewById(R.id.textline1);
 //		if(line1 == null) return;
 //		line1.setText(msg);
@@ -150,7 +154,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 				}
 			}
 		} catch (Exception ex) {
-			Log.e("Socket exception in GetIP Address of Utilities", ex.toString());
+			Log.d("StrataDroid","Socket exception in GetIP Address of Utilities " + ex.toString());
 
 		}
 		return "0.0.0.0"; 
