@@ -1,5 +1,8 @@
 package com.vmware.loginsight;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -14,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
@@ -40,6 +44,14 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		intent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
 		startService(intent);
 		
+		String ip;
+		try {
+			ip =  InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			ip = "Unknown ip";
+		}
+		set_text_line1(ip);
 	}
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		Log.d("StrataDroid",key + " changed");
@@ -54,8 +66,6 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		Context context = getApplicationContext();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
-		// TODO: Pull this from the prefs file
-		//
 		String ip = prefs.getString("SERVER_NAME", "10.148.104.186");
 		String proto = prefs.getString("PROTOCOL","udp");
 		
@@ -118,5 +128,9 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 			return rootView;
 		}
 	}
-
+	public void set_text_line1(String msg){
+		TextView line1 = (TextView) findViewById(R.id.textline1);
+		line1.setText(msg);
+		
+	}
 }

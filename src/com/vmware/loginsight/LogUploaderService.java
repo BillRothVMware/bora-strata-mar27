@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+@SuppressWarnings("unused")
 public class LogUploaderService extends IntentService {
 
 	public static final String EXTRA_LOG_INSIGHT_HOST = "Host";
