@@ -26,12 +26,26 @@
     <string name="zero">0</string>
     <string name="defaultPort">514</string>
     <string name="portTitle">Port</string>
-    <string name="about_title">About Log Insightq</string>
+    <string name="about_title">About Log Insight</string>
     <string name="foo">foo</string>
     <string name="SERVER_NAME">SERVER_NAME</string>
     <string name="PROTOCOL">PROTOCOL</string>
     <string name="PORT">PORT</string>
     <string name="PREPEND_MSG_TEXT">PREPEND_MSG_TEXT</string>
     <string name="ADD_DEVICE_NAME">ADD_DEVICE_NAME</string>
+    <string-array name="loglevelArray">
+        <item >debug</item>
+        <item >info</item>
+        <item >warn</item>
+        <item >error</item>
+        <item >critical</item>
+    </string-array>
+    <string-array name="logLevelValues">
+        <item >debug</item>
+        <item >info</item>
+        <item >warn</item>
+        <item >error</item>
+        <item >critical</item>
+    </string-array>
 
 </resources>
