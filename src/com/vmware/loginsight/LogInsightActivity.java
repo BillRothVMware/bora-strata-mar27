@@ -22,10 +22,13 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("StrataDroid","onCreate main activity");
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_log_insight);
+		String host;
 		
-		initializePreferences();
+		host = initializePreferences();
 		
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
@@ -47,10 +50,12 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	}
 	
 	
-	private void initializePreferences() {
+	private String initializePreferences() {
 		Context context = getApplicationContext();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		
+		// TODO: Pull this from the prefs file
+		//
 		String ip = prefs.getString("SERVER_NAME", "10.148.104.186");
 		String proto = prefs.getString("PROTOCOL","udp");
 		
@@ -58,7 +63,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		x=12;
 		// now set up the listener
 		prefs.registerOnSharedPreferenceChangeListener(this);
-		
+		return ip;
 	}
 
 	@Override
@@ -84,7 +89,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 			return true;
 		case R.id.action_about:
 			//
-			// Put in dialog here 
+			//TODO: Put in dialog here 
 			// see sample: http://developer.android.com/guide/topics/ui/dialogs.html
 			//
 			Log.d("tag","Calling about dialog");

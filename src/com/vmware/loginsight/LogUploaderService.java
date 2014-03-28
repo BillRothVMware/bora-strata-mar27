@@ -11,7 +11,10 @@ import com.vmware.loginsight.send.LogInsightProtocol;
 import com.vmware.loginsight.send.LogLevel;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class LogUploaderService extends IntentService {
@@ -30,19 +33,28 @@ public class LogUploaderService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		// TODO Auto-generated method stub
+		 
 		if (!LogCatReader.requestPermissions(getApplicationContext())) {
 			Log.w(getClass().getName(),
 					"Failed to acquire READ_LOGS permission, reading app-local logs only.");
 		}
 		final LogCatReader reader = new LogCatReader();
 		try {
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+			String host,sPort;
+			int port;
+			sPort = preferences.getString("PORT", "514");
+			try {
+				port = Integer.parseInt(sPort);
+			} catch (Exception e1) {
+				port = 514;
+			}
+			
+
 			final SyslogClient client = new SyslogClient(
-					//
-					//TODO: Pull from preferences
-					//
+					
 					intent.getStringExtra(EXTRA_LOG_INSIGHT_HOST),
-					intent.getIntExtra(EXTRA_LOG_INSIGHT_PORT, 514),
+					intent.getIntExtra(EXTRA_LOG_INSIGHT_PORT, port),
 					LogInsightProtocol.SYSLOG_UDP);
 			reader.addListener(new LogCatListener() {
 
