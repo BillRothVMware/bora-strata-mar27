@@ -60,14 +60,12 @@ public class LogUploaderService extends Service {
 				@Override
 				public void handleLogCatMessage(LogEntry entry) {
 					Map<String, String> fields = new HashMap<>();
-					fields.put("tag", entry.getTag());
 					fields.put("log_time", entry.getTimestamp());
-					fields.put("pid", entry.getPid());
 					fields.put("tid", entry.getTid());
 					try {
 						client.send(entry.getMessage(),
 								LogLevel.fromLogCatLevel(entry.getLogLevel()),
-								fields);
+								fields, entry.getTag(), entry.getPid());
 					} catch (Exception e) {
 						// Don't throw if this fails as we might create a log
 						// cycle
