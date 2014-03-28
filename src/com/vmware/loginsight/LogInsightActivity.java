@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +46,7 @@ public class LogInsightActivity extends Activity {
 		switch(id) {
 		
 		case R.id.action_settings:
+			Log.d("tag","Calling setting dialog");
 			Intent i = new Intent(this,SettingsActivity.class);
 			startActivityForResult(i,1);
 			return true;
@@ -53,6 +55,7 @@ public class LogInsightActivity extends Activity {
 			// Put in dialog here 
 			// see sample: http://developer.android.com/guide/topics/ui/dialogs.html
 			//
+			Log.d("tag","Calling about dialog");
 			int x;
 			x=12;
 			return true;
