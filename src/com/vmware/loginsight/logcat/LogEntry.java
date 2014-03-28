@@ -1,7 +1,5 @@
 package com.vmware.loginsight.logcat;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,22 +43,11 @@ public class LogEntry {
 	/*
 	 * End AOSP Code
 	 */
-	
-	private static final Map<String, String> sLogLevels = new HashMap<>();
-	static {
-		sLogLevels.put("V", "VERBOSE");
-		sLogLevels.put("D", "DEBUG");
-		sLogLevels.put("I", "INFO");
-		sLogLevels.put("W", "WARN");
-		sLogLevels.put("E", "ERROR");
-		sLogLevels.put("A", "ASSERT");
-		sLogLevels.put("F", "ASSERT");
-	}
 
 	private String mTimestamp;
 	private String mPid; 
 	private String mTid; 
-	private String mLogLevel;
+	private LogLevel mLogLevel;
 	private String mTag;
 	private String mMessage;
 	
@@ -80,7 +67,7 @@ public class LogEntry {
 		return mTid;
 	}
 	
-	public String getLogLevel() {
+	public LogLevel getLogLevel() {
 		return mLogLevel;
 	}
 	
@@ -96,10 +83,6 @@ public class LogEntry {
 		return String.format("LogEntry[%s %s %s %s %s]%s", mTimestamp, mLogLevel, mTag, mPid, mTid, mMessage);
 	}
 	
-	public static String logLevelFromLetter(String logLetter) {
-		return sLogLevels.get(logLetter);
-	}
-	
 	public static LogEntry create(String header, String message) {
 		Matcher matcher = sLogHeaderPattern.matcher(header);
 		if (!matcher.matches()) {
@@ -109,7 +92,7 @@ public class LogEntry {
 		entry.mTimestamp = matcher.group(1);
 		entry.mPid = matcher.group(2);
 		entry.mTid = matcher.group(3);
-		entry.mLogLevel = logLevelFromLetter(matcher.group(4));
+		entry.mLogLevel = LogLevel.fromLetter(matcher.group(4));
 		entry.mTag = matcher.group(5).trim();
 		entry.mMessage = message;
 		return entry;
