@@ -26,6 +26,7 @@ public class LogInsightActivity extends Activity {
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		Intent intent = new Intent(getApplicationContext(), LogUploaderService.class);
+		intent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
 		startService(intent);
 	}
 

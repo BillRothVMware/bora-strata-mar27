@@ -13,7 +13,7 @@ public enum LogLevel {
 		return level;
 	}
 	
-	public LogLevel fromLogCatLevel(com.vmware.loginsight.logcat.LogLevel level) {
+	public static LogLevel fromLogCatLevel(com.vmware.loginsight.logcat.LogLevel level) {
 		switch(level) {
 		case VERBOSE:
 			return ALERT;
