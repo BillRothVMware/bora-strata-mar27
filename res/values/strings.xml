@@ -48,5 +48,6 @@
         <item >critical</item>
     </string-array>
     <string name="title_activity_settings">Settings</string>
+    <string name="LogTag">StrataDroid</string>
 
 </resources>

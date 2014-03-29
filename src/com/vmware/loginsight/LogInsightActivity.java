@@ -1,5 +1,5 @@
 package com.vmware.loginsight;
-
+//FIXME: Insert Headers
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -26,7 +26,8 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 
 /**
- * @author bill
+ * @author bill roth
+ * @since 3/27/2014
  *
  */
 @SuppressWarnings("unused")
@@ -34,17 +35,20 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 
 	private PlaceholderFragment frag;
 	private Intent serviceIntent;
+	private String gLogTag;
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("StrataDroid","onCreate main activity");
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_log_insight);
 		String host;
 		
 		host = initializePreferences();
+		
+		gLogTag = getString(R.string.LogTag);
+		Logd("onCreate main activity");
 		
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
@@ -60,7 +64,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		set_text_line1(ip);
 	}
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		Log.d("StrataDroid",key + " changed");
+		Logd(key + " changed");
 		//
 		//TODO: Add settings update when you get a chance method.
 		//    stop service 
@@ -73,6 +77,11 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	}
 	
 	
+	/**
+	 * Initialize the preferences on first run, or load them into cache when already present.
+	 * @author broth
+	 * @return String the IP we we thing were running from.
+	 */
 	private String initializePreferences() {
 		Context context = getApplicationContext();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -104,7 +113,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		switch(id) {
 		
 		case R.id.action_settings:
-			Log.d("StrataDroid","Calling setting dialog");
+			Logd("Calling setting dialog");
 			Intent i = new Intent(this,SettingsActivity.class);
 			startActivityForResult(i,1);
 			return true;
@@ -113,7 +122,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 			//TODO: Put in dialog here 
 			// see sample: http://developer.android.com/guide/topics/ui/dialogs.html
 			//
-			Log.d("StrataDroid","Calling about dialog");
+			Logd("Calling about dialog");
 			int x;
 			x=12;
 			return true;
@@ -125,6 +134,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 
 	/**
 	 * A placeholder fragment containing a simple view.
+	 * FIXME: Delete
 	 */
 	public static class PlaceholderFragment extends Fragment {
 
@@ -141,7 +151,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		View getRootView() {return rootView;}
 	}
 	public void set_text_line1(String msg){
-		Log.d("StrataDroid","IP appears to be " + msg);
+		Logd("IP appears to be " + msg);
 		//TODO: Fix need to grab text view and aset it with ip address
 		//
 //		TextView line1 = (TextView) frag.getRootView().findViewById(R.id.textline1);
@@ -149,6 +159,10 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 //		line1.setText(msg);
 		
 	}
+	/**
+	 * @return IP Address String
+	 * TODO: See if VPN, return;
+	 */
 	public String getipAddress() { 
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
@@ -159,13 +173,13 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 						String ipaddress=inetAddress.getHostAddress().toString();
 						if(ipaddress.contains("::"))
 							continue;
-						Log.d("StrataDroid","ip address" + ipaddress);
+						Logd("ip address" + ipaddress);
 						return ipaddress;
 					}
 				}
 			}
 		} catch (Exception ex) {
-			Log.d("StrataDroid","Socket exception in GetIP Address of Utilities " + ex.toString());
+			Logd("Socket exception in GetIP Address of Utilities " + ex.toString());
 
 		}
 		return "0.0.0.0"; 
@@ -176,7 +190,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	    super.onStart();
 	     // The rest of your onStart() code.
 	    EasyTracker.getInstance().activityStart(this); // Add this method.
-	    Log.d("StrataDroid","onStart in Main Activity");
+	    Logd("onStart in Main Activity");
 	  }
 
 	  @Override
@@ -184,6 +198,15 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	    super.onStop();
 	    // The rest of your onStop() code.
 	    EasyTracker.getInstance().activityStop(this); // Add this method.
-	    Log.d("StrataDroid","onStart in Main Activity");
+	    Logd("onStop in Main Activity");
+	  }
+	  /**
+	 * @param msg Log message
+	 * @return voi
+	 * @author bill roth
+	 * @since 3/29/2014
+	 */
+	private void Logd(String msg) {
+		  Log.d(gLogTag,msg);
 	  }
 }
