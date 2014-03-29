@@ -17,6 +17,7 @@ import org.productivity.java.syslog4j.impl.message.processor.structured.Structur
 import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.productivity.java.syslog4j.impl.net.tcp.ssl.SSLTCPNetSyslogConfig;
 
+@SuppressWarnings("unused")
 public class APIClient {
 
 	private final String url;
