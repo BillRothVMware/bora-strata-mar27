@@ -5,6 +5,8 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -23,6 +25,10 @@ import android.widget.TextView;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+/**
+ * @author bill
+ *
+ */
 @SuppressWarnings("unused")
 public class LogInsightActivity extends Activity implements OnSharedPreferenceChangeListener {
 
@@ -164,4 +170,18 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		}
 		return "0.0.0.0"; 
 	}
+	
+	  @Override
+	  public void onStart() {
+	    super.onStart();
+	     // The rest of your onStart() code.
+	    EasyTracker.getInstance().activityStart(this); // Add this method.
+	  }
+
+	  @Override
+	  public void onStop() {
+	    super.onStop();
+	    // The rest of your onStop() code.
+	    EasyTracker.getInstance().activityStop(this); // Add this method.
+	  }
 }

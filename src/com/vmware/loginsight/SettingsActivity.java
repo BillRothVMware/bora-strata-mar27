@@ -23,6 +23,8 @@ import android.support.v4.app.NavUtils;
 
 import java.util.List;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -83,6 +85,20 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 		return true;
 	} // method
+	
+	  @Override
+	  public void onStart() {
+	    super.onStart();
+	    // The rest of your onStart() code.
+	    EasyTracker.getInstance().activityStart(this); // Add this method.
+	  }
+
+	  @Override
+	  public void onStop() {
+	    super.onStop();
+	    // The rest of your onStop() code.
+	    EasyTracker.getInstance().activityStop(this); // Add this method.
+	  }
 
 }
 
