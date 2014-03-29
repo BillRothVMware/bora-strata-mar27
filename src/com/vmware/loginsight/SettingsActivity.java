@@ -91,6 +91,7 @@ public class SettingsActivity extends PreferenceActivity {
 	    super.onStart();
 	    // The rest of your onStart() code.
 	    EasyTracker.getInstance().activityStart(this); // Add this method.
+	    Log.d("StrataDroid","onStart in Settings Activity");
 	  }
 
 	  @Override
@@ -98,6 +99,7 @@ public class SettingsActivity extends PreferenceActivity {
 	    super.onStop();
 	    // The rest of your onStop() code.
 	    EasyTracker.getInstance().activityStop(this); // Add this method.
+	    Log.d("StrataDroid","onStop in Settings Activity");
 	  }
 
 }

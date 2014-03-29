@@ -176,6 +176,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	    super.onStart();
 	     // The rest of your onStart() code.
 	    EasyTracker.getInstance().activityStart(this); // Add this method.
+	    Log.d("StrataDroid","onStart in Main Activity");
 	  }
 
 	  @Override
@@ -183,5 +184,6 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	    super.onStop();
 	    // The rest of your onStop() code.
 	    EasyTracker.getInstance().activityStop(this); // Add this method.
+	    Log.d("StrataDroid","onStart in Main Activity");
 	  }
 }
