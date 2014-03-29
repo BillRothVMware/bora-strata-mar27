@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <resources>
-  <!--Replace placeholder ID with your tracking ID-->
+    
+  <!--Documentation is here: https://developers.google.com/analytics/devguides/collection/android/v2/-->
+  
   <string name="ga_trackingId">UA-43863239-5</string>
 
   <!--Enable automatic activity tracking-->
@@ -9,4 +11,8 @@
 
   <!--Enable automatic exception tracking-->
   <bool name="ga_reportUncaughtExceptions">true</bool>
+  
+  <!--Enable debug logging-->
+  <bool name="ga_debug">true</bool>
+  
 </resources>
