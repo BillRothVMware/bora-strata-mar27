@@ -1,5 +1,6 @@
 package com.vmware.loginsight;
 //FIXME: Insert Headers
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -33,10 +34,10 @@ import android.preference.PreferenceManager;
 @SuppressWarnings("unused")
 public class LogInsightActivity extends Activity implements OnSharedPreferenceChangeListener {
 
-	private PlaceholderFragment frag;
+	//private PlaceholderFragment frag;
 	private Intent serviceIntent;
 	private String gLogTag;
-	
+	private String gIP; // My ipaddress
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +51,15 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		gLogTag = getString(R.string.LogTag);
 		Logd("onCreate main activity");
 		
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, frag = new PlaceholderFragment()).commit();
-		}
 		serviceIntent = new Intent(getApplicationContext(), LogUploaderService.class);
-		// TODO: set based on prefs
-		//
-		serviceIntent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, "10.148.104.186");
+
+		serviceIntent.putExtra(LogUploaderService.EXTRA_LOG_INSIGHT_HOST, host);
 		startService(serviceIntent);
 		
-		String ip = getipAddress();
-		set_text_line1(ip);
+		gIP = getipAddress();
 	}
+	
+	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 		Logd(key + " changed");
 		//
@@ -70,7 +67,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 		//    stop service 
 		stopService(serviceIntent);
 		//
-		// do something
+		// Restarting the service reinitializes it to the new global settings.
 		//
 		startService(serviceIntent);
 		
@@ -79,6 +76,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	
 	/**
 	 * Initialize the preferences on first run, or load them into cache when already present.
+	 * 
 	 * @author broth
 	 * @return String the IP we we thing were running from.
 	 */
@@ -133,46 +131,18 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	}
 
 	/**
-	 * A placeholder fragment containing a simple view.
-	 * FIXME: Delete
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-        private View rootView;
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			rootView = inflater.inflate(R.layout.fragment_log_insight,
-					container, false);
-			return rootView;
-		}
-		View getRootView() {return rootView;}
-	}
-	public void set_text_line1(String msg){
-		Logd("IP appears to be " + msg);
-		//TODO: Fix need to grab text view and aset it with ip address
-		//
-//		TextView line1 = (TextView) frag.getRootView().findViewById(R.id.textline1);
-//		if(line1 == null) return;
-//		line1.setText(msg);
-		
-	}
-	/**
 	 * @return IP Address String
 	 * TODO: See if VPN, return;
 	 */
 	public String getipAddress() { 
+		
 		try {
 			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
 				NetworkInterface intf = (NetworkInterface) en.nextElement();
 				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
 					InetAddress inetAddress = (InetAddress) enumIpAddr.nextElement();
-					if (!inetAddress.isLoopbackAddress()) {
+					if (!inetAddress.isLoopbackAddress() && (inetAddress instanceof Inet4Address)) {
 						String ipaddress=inetAddress.getHostAddress().toString();
-						if(ipaddress.contains("::"))
-							continue;
 						Logd("ip address" + ipaddress);
 						return ipaddress;
 					}
@@ -191,6 +161,7 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	     // The rest of your onStart() code.
 	    EasyTracker.getInstance().activityStart(this); // Add this method.
 	    Logd("onStart in Main Activity");
+	    setText(gIP);
 	  }
 
 	  @Override
@@ -209,4 +180,9 @@ public class LogInsightActivity extends Activity implements OnSharedPreferenceCh
 	private void Logd(String msg) {
 		  Log.d(gLogTag,msg);
 	  }
+	
+	public void setText(String msg) {
+		TextView line1 = (TextView) findViewById(R.id.textView1);
+		line1.setText(msg);
+	}
 }
